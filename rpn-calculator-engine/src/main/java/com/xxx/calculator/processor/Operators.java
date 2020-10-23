@@ -1,6 +1,7 @@
 package com.xxx.calculator.processor;
 
 import java.util.Optional;
+import java.util.Stack;
 
 import static com.xxx.calculator.processor.BinaryOperator.DIVIDE_OPERATOR;
 import static com.xxx.calculator.processor.BinaryOperator.MINUS_OPERATOR;
@@ -93,6 +94,9 @@ public final class Operators {
         return ClearOperator.INSTANCE;
     }
 
+    /**
+     * Undo operator. Calls {@link CalculatorProcessor#undo()} for the given processor.
+     */
     private static final class UndoOperator implements Operator {
 
         private static final Operator INSTANCE = new UndoOperator();
@@ -101,12 +105,15 @@ public final class Operators {
         }
 
         @Override
-        public Optional<RevertibleStackChange> operate(final CalculatorProcessor calculator) {
-            calculator.undo();
+        public Optional<RevertibleStackChange> operate(final CalculatorProcessor processor) {
+            processor.undo();
             return empty();
         }
     }
 
+    /**
+     * Clear operator. Calls {@link CalculatorProcessor#clear()} for the given processor.
+     */
     private static final class ClearOperator implements Operator {
 
         private static final Operator INSTANCE = new ClearOperator();
@@ -115,12 +122,29 @@ public final class Operators {
         }
 
         @Override
-        public Optional<RevertibleStackChange> operate(final CalculatorProcessor calculator) {
-            calculator.clear();
+        public Optional<RevertibleStackChange> operate(final CalculatorProcessor processor) {
+            processor.clear();
             return empty();
         }
     }
 
+    /**
+     * Operator to push number on top of the calculator's execution stack.
+     */
+    private static class PushNumber implements Operator {
 
+        private static final RevertibleStackChange REVERT_CHANGE = Stack::pop;
 
+        private final Double number;
+
+        PushNumber(final Double number) {
+            this.number = number;
+        }
+
+        @Override
+        public Optional<RevertibleStackChange> operate(final CalculatorProcessor calculator) {
+            calculator.push(number);
+            return Optional.of(REVERT_CHANGE);
+        }
+    }
 }
