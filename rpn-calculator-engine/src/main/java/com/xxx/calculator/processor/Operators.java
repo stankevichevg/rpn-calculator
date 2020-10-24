@@ -146,5 +146,6 @@ public final class Operators {
             calculator.push(number);
             return Optional.of(REVERT_CHANGE);
         }
+
     }
 }
