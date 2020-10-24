@@ -3,11 +3,11 @@ package com.xxx.calculator.processor;
 import java.util.List;
 import java.util.Stack;
 
-import static java.util.Collections.unmodifiableList;
+import static java.util.List.copyOf;
 
 /**
  * Models calculator processor. State can be changed by executing of operators using {@link #execute(Operator)}.
- * At any time current state of execution stack can be observed using {@link #stackElementsView()} method.
+ * At any time current state of execution stack can be observed using {@link #stackElements()} method.
  *
  * Internally it holds two data structures:
  * 1. Current execution stack with Double numbers (to have required at least 15 decimal places of precision);
@@ -42,17 +42,14 @@ public final class CalculatorProcessor {
     }
 
     /**
-     * List view of the execution stack elements in order from bottom to top.
-     * Returned object can be used to observe execution stack state at different moments,
-     * if execution stack state changes view will mimic these changes automatically.
+     * LExecution stack elements snapshot in order from bottom to top.
      *
-     * Note that view does not provide access to change execution stack state,
-     * it can be achieved only by executing an operator.
+     * Note that view does not provide access to change execution stack state.
      *
-     * @return list of the execution stack elements
+     * @return unmodifiable list of the execution stack elements
      */
-    public List<Double> stackElementsView() {
-        return unmodifiableList(executionStack);
+    public List<Double> stackElements() {
+        return copyOf(executionStack);
     }
 
     void undo() {

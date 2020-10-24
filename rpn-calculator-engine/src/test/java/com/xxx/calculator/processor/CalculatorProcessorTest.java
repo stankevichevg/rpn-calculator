@@ -39,7 +39,7 @@ public class CalculatorProcessorTest {
     public void whenProcessorCreatedThenItHasEmptyState() {
         final CalculatorProcessor calculator = new CalculatorProcessor();
         assertThat(calculator.executionStackSize(), is(0));
-        assertThat(calculator.stackElementsView(), empty());
+        assertThat(calculator.stackElements(), empty());
     }
 
 }
